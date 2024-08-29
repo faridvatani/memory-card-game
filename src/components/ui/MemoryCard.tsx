@@ -29,6 +29,8 @@ const MemoryCard: FC<MemoryCardProps> = ({
         src={card.image}
         alt="card"
         className="object-cover rotate-180 size-16 sm:size-24 rounded-lg"
+        priority
+        loading="eager"
       />
     ) : (
       <div className="absolute inset-0 bg-slate-400 rounded-md box-border" />
