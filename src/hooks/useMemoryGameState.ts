@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { generateDeck } from "../utils/deckUtils";
+import { generateDeck } from "@/utils/deckUtils";
 import { Card } from "@/data/cardData";
 
 const useMemoryGameState = () => {

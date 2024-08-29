@@ -1,7 +1,7 @@
 "use client";
 import React, { FC } from "react";
-import ResetButton from "../ui/ResetButton";
-import MemoryCard from "../ui/MemoryCard";
+import ResetButton from "@/components/ui/ResetButton";
+import MemoryCard from "@/components/ui/MemoryCard";
 import useMemoryGameState from "@/hooks/useMemoryGameState";
 
 const MemoryGame: FC = () => {
