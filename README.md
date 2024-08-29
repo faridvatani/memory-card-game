@@ -1,3 +1,9 @@
+# Memory Card Game
+
+<img src="Screenshot.png" alt="Memory Card Game" >
+
+This is a simple memory card game built with Next.js. The game has 16 cards, each with a matching pair. The goal of the game is to match all the cards in the least amount of time possible. The game ends when all cards are matched, and the score is based on the elapsed time.
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
