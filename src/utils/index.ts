@@ -1,4 +1,5 @@
-import { Card, cards } from "@/data/cardData";
+import { cards } from "@/data";
+import { Card } from "@/types";
 
 // Function to shuffle an array using the Fisher-Yates algorithm
 export const shuffleArray = <T>(array: T[]): T[] => {

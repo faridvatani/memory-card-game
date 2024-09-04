@@ -1,4 +1,4 @@
-import { StaticImageData } from "next/image";
+import { Card } from "@/types";
 import {
   donut,
   frenchFries,
@@ -9,11 +9,6 @@ import {
   sandwich,
   taco,
 } from "@/assets";
-
-// Interface for a card object, which includes an image property
-export interface Card {
-  image: StaticImageData;
-}
 
 // Array of card objects, each with a unique image
 export const cards: Card[] = [

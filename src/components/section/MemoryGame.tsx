@@ -1,42 +1,46 @@
 "use client";
-import React, { FC } from "react";
+import React, { FC, useCallback, useReducer } from "react";
 import ResetButton from "@/components/ui/ResetButton";
 import MemoryCard from "@/components/ui/MemoryCard";
-import useMemoryGameState from "@/hooks/useMemoryGameState";
+import { initialState, memoryGameReducer } from "@/reducers/MemoryCardReducer";
+import useTimer from "@/hooks/useTimer";
+import useCardFlip from "@/hooks/useCardFlip";
 
 const MemoryGame: FC = () => {
-  const {
-    deck,
-    flippedIndices,
-    solvedIndices,
-    elapsedTime,
-    timerStarted,
-    score,
-    setFlippedIndices,
-    setTimerStarted,
-    resetGame,
-  } = useMemoryGameState();
+  const [state, dispatch] = useReducer(memoryGameReducer, initialState);
 
-  // Function to handle card flip logic
-  const handleCardFlip = (index: number) => {
-    if (!timerStarted) {
-      setTimerStarted(true);
-    }
+  useTimer(state, dispatch);
+  useCardFlip(state, dispatch);
 
-    if (!flippedIndices.includes(index) && flippedIndices.length < 2) {
-      setFlippedIndices([...flippedIndices, index]);
-    }
-  };
+  const resetGame = useCallback(() => {
+    dispatch({ type: "RESET_GAME" });
+  }, []);
 
-  // Check if the game is over
-  const isGameOver = solvedIndices.length === deck.length;
+  const handleCardFlip = useCallback(
+    (index: number) => {
+      if (
+        state.flippedIndices.length < 2 &&
+        !state.flippedIndices.includes(index)
+      ) {
+        if (!state.timerStarted) {
+          dispatch({ type: "START_TIMER" });
+        }
+        dispatch({ type: "FLIP_CARD", index });
+      }
+    },
+    [state.flippedIndices, state.timerStarted],
+  );
+
+  const isGameOver = state.gameOver;
 
   return (
     <>
       <div className="grid grid-cols-1 gap-4 p-0 md:p-4">
         <span className="text-sm md:text-lg text-center font-semibold">
           Elapsed Time:{" "}
-          <span className="text-base md:text-xl font-bold">{elapsedTime}</span>{" "}
+          <span className="text-base md:text-xl font-bold">
+            {state.elapsedTime}
+          </span>{" "}
           seconds
         </span>
         <div className="grid grid-cols-4 gap-2 md:gap-4 relative">
@@ -46,20 +50,24 @@ const MemoryGame: FC = () => {
               role="alert"
               aria-live="assertive"
             >
-              <h2 className="text-4xl text-center font-semibold text-green-500 animate-bounce">
-                You Won, Congrats!
+              <h2
+                className={`text-4xl text-center font-semibold animate-bounce ${
+                  state.score > 0 ? "text-green-500" : "text-rose-500"
+                }`}
+              >
+                {state.score > 0 ? "You Won, Congrats!" : "Time's Up!"}
               </h2>
               <span className="text-2xl text-center text-white font-semibold mt-4">
-                Score: {score} points
+                Score: {state.score} points
               </span>
             </div>
           )}
-          {deck.map((card, index) => (
+          {state.deck.map((card, index) => (
             <MemoryCard
               key={index}
               card={card}
-              isFlipped={flippedIndices.includes(index)}
-              isSolved={solvedIndices.includes(index)}
+              isFlipped={state.flippedIndices.includes(index)}
+              isSolved={state.solvedIndices.includes(index)}
               onClick={() => handleCardFlip(index)}
               index={index}
             />
